@@ -13,10 +13,25 @@ import {
   TouchableOpacity,
 } from "react-native";
 import {useState,styles} from "react";
-import { Card, ListItem } from 'react-native-elements';
-import { PricingCard, lightColors ,ButtonGroup} from '@rneui/themed';
+import { PricingCard, lightColors ,ButtonGroup,Card, Avatar,ListItem,Badge} from '@rneui/themed';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { WebView } from 'react-native-webview'
+
+
+const list = [
+  {
+    name: 'IIT-Bombay',
+    avatar_url: 'https://drive.google.com/file/d/10MnBwreBmMybZ9TnRefqe2hMQjulaEaa/view?usp=sharing',
+    subtitle: 'Mumbai'
+  },
+  {
+    name: 'BMSCE',
+    avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+    subtitle: 'Bangalore'
+  },
+
+]
+
 
 function HomeScreen({ navigation }) 
 {
@@ -24,8 +39,7 @@ function HomeScreen({ navigation })
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const onPress = () => Alert.alert('Simple Button pressed');
-  
- 
+
   return (
     <View style={styless.container}>
       <Image style={styless.image} source={require("./assets/log2.png")} />
@@ -85,11 +99,119 @@ function FootBallPricing() {
   );
 }
 
-class MyWebPage extends Component {
+function Transactions() {
+  
+  return (
+    <View>
+      <ScrollView >
+    <PricingCard style={styless.container3}
+        color={lightColors.primary}
+        title="Nike Football"
+        price="Rs-50"
+        info={['Description - Football', 'Duration - 120 mins', 'OrderNo-123456']}
+        button={{ title: 'Have Issues', icon: 'flight-takeoff' }}
+      />
+
+    <PricingCard style={styless.container3}
+        color={lightColors.primary}
+        title="MRF Bat"
+        price="Rs-10"
+        info={['Description - Cricket', 'Duration - 120 mins', 'OrderNo-123456']}
+        button={{ title: 'Have Issues', icon: 'flight-takeoff' }}
+      />
+
+     <PricingCard style={styless.container3}
+        color={lightColors.primary}
+        title="Yonex Badminton"
+        price="Rs-10"
+        info={['Description - Badminton', 'Duration - 120 mins', 'OrderNo-124456']}
+        button={{ title: 'Have Issues', icon: 'flight-takeoff' }}
+      />
+      </ScrollView>
+      </View>
+  );
+}
+
+
+function Leaderboard() {
+  
+  return (
+    <View>
+
+  <ListItem bottomDivider>
+              <Badge value="1st"/>
+              <ListItem.Content>
+                <ListItem.Title>IIT-BOMBAY 😻</ListItem.Title>
+                <ListItem.Subtitle><Text>Mumbai</Text></ListItem.Subtitle>
+                <ListItem.Subtitle><Text>4096 Pts</Text></ListItem.Subtitle>
+              </ListItem.Content>
+  </ListItem>
+
+  <ListItem bottomDivider>
+              <Badge value="2nd"/>
+              <ListItem.Content>
+                <ListItem.Title>BMSCE 😻</ListItem.Title>
+                <ListItem.Subtitle><Text>Bangalore</Text></ListItem.Subtitle>
+                <ListItem.Subtitle><Text>4006 Pts</Text></ListItem.Subtitle>
+              </ListItem.Content>
+  </ListItem>
+
+  <ListItem bottomDivider>
+              <Badge value="3rd"/>
+              <ListItem.Content>
+                <ListItem.Title>IIT-KANPUR 😻</ListItem.Title>
+                <ListItem.Subtitle><Text>Kanpur</Text></ListItem.Subtitle>
+                <ListItem.Subtitle><Text>3076 Pts</Text></ListItem.Subtitle>
+              </ListItem.Content>
+  </ListItem>
+
+  <ListItem bottomDivider>
+              <Badge value="1st" />
+              <ListItem.Content>
+                <ListItem.Title>IIT-BOMBAY 😻</ListItem.Title>
+                <ListItem.Subtitle><Text>Mumbai</Text></ListItem.Subtitle>
+                <ListItem.Subtitle><Text>4096 Pts</Text></ListItem.Subtitle>
+              </ListItem.Content>
+  </ListItem>
+
+  <ListItem bottomDivider>
+              <Badge value="1st"/>
+              <ListItem.Content>
+                <ListItem.Title>IIT-BOMBAY 😻</ListItem.Title>
+                <ListItem.Subtitle><Text>Mumbai</Text></ListItem.Subtitle>
+                <ListItem.Subtitle><Text>4096 Pts</Text></ListItem.Subtitle>
+              </ListItem.Content>
+  </ListItem>
+
+  <ListItem bottomDivider>
+              <Badge value="1st"  size={20} />
+              <ListItem.Content>
+                <ListItem.Title>IIT-BOMBAY 😻</ListItem.Title>
+                <ListItem.Subtitle><Text>Mumbai</Text></ListItem.Subtitle>
+                <ListItem.Subtitle><Text>4096 Pts</Text></ListItem.Subtitle>
+              </ListItem.Content>
+  </ListItem>
+
+  <ListItem bottomDivider>
+              <Badge value="1st" />
+              <ListItem.Content>
+                <ListItem.Title>IIT-BOMBAY 😻</ListItem.Title>
+                <ListItem.Subtitle><Text>Mumbai</Text></ListItem.Subtitle>
+                <ListItem.Subtitle><Text>4096 Pts</Text></ListItem.Subtitle>
+              </ListItem.Content>
+  </ListItem>
+
+</View>
+  );
+}
+
+
+
+class support extends Component {
   render() {
     return (
       <WebView
-        source={{ uri: 'https://infinite.red' }}
+        source={{ uri: 'https://wa.me/919598829911?text=Hello%20Please%20Tell%20Us%20How%20Can%20We%20Help%20You%20Today.....' }}
         style={{ marginTop: 20 }}
       />
     );
@@ -129,10 +251,10 @@ function DetailsScreen({ navigation }) {
 
         <View style={styless.rowContainer3}>
         <Text>
-        const myIcon = <Icon name="database" size={45} color="#34aeeb" />;
+        const myIcon = <Icon onPress={() => navigation.navigate('Transactions')}   name="database" size={45} color="#34aeeb" />;
     </Text>
      <Text>
-     const myIcon = <Icon name="trophy" size={45} color="#34aeeb" />;
+     const myIcon = <Icon onPress={() => navigation.navigate('LeaderBoard')}    name="trophy" size={45} color="#34aeeb" />;
      </Text>
      <Text>
      const myIcon = <Icon onPress={() => navigation.navigate('Support')} name="phone" size={45} color="#34aeeb" />;
@@ -414,7 +536,9 @@ function App() {
         <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Details" component={DetailsScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Football" component={FootBallPricing} />
-        <Stack.Screen name="Support" component={MyWebPage} />
+        <Stack.Screen name="Support" component={support} />
+        <Stack.Screen name="Transactions" component={Transactions} />
+        <Stack.Screen name="LeaderBoard" component={Leaderboard} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -489,7 +613,7 @@ const styless = StyleSheet.create({
  
   container3: {
     flex: 1,
-    backgroundColor: "#000000",
+    backgroundColor: "ffffff",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -534,3 +658,26 @@ const styless = StyleSheet.create({
     backgroundColor: "#ffffff",
   },
 });
+
+
+const styles1 = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  fonts: {
+    marginBottom: 8,
+  },
+  user: {
+    flexDirection: 'row',
+    marginBottom: 6,
+  },
+  image: {
+    width: 30,
+    height: 30,
+    marginRight: 10,
+  },
+  name: {
+    fontSize: 16,
+    marginTop: 5,
+  },
+  });
