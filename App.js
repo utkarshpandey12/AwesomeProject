@@ -85,13 +85,15 @@ function FootBallPricing() {
   );
 }
 
-function ReachUs() {
-  
-  return (
-    <View>
-       return <WebView source={{ uri: 'https://reactnative.dev/' }} />;
-      </View>
-  );
+class MyWeb extends Component {
+  render() {
+    return (
+      <WebView
+        source={{ uri: 'https://infinite.red' }}
+        style={{ marginTop: 20 }}
+      />
+    );
+  }
 }
 
 
@@ -412,7 +414,7 @@ function App() {
         <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Details" component={DetailsScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Football" component={FootBallPricing} />
-        <Stack.Screen name="Support" component={ReachUs} />
+        <Stack.Screen name="Support" component={MyWeb} />
       </Stack.Navigator>
     </NavigationContainer>
   );
