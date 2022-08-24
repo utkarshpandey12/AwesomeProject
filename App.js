@@ -85,7 +85,7 @@ function FootBallPricing() {
   );
 }
 
-class MyWeb extends Component {
+class MyWebPage extends Component {
   render() {
     return (
       <WebView
@@ -414,7 +414,7 @@ function App() {
         <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Details" component={DetailsScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Football" component={FootBallPricing} />
-        <Stack.Screen name="Support" component={MyWeb} />
+        <Stack.Screen name="Support" component={MyWebPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );
