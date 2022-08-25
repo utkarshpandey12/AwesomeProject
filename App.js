@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { Button, View, Text,ScrollView,SafeAreaView} from 'react-native';
+import React, { Component, useEffect } from 'react'
+import { Button, View, Text,ScrollView,SafeAreaView,Alert } from 'react-native';
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -7,7 +7,6 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import {
   StyleSheet,
   TextInput,
-  Alert,
   Image,
   onPress,
   TouchableOpacity,
@@ -18,19 +17,11 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { WebView } from 'react-native-webview'
 
 
-const list = [
-  {
-    name: 'IIT-Bombay',
-    avatar_url: 'https://drive.google.com/file/d/10MnBwreBmMybZ9TnRefqe2hMQjulaEaa/view?usp=sharing',
-    subtitle: 'Mumbai'
-  },
-  {
-    name: 'BMSCE',
-    avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-    subtitle: 'Bangalore'
-  },
 
-]
+let url = 'https://83y17x4f22.execute-api.ap-south-1.amazonaws.com/prod/users?function=get-user&user-email=';
+
+
+var responsed = {};
 
 
 function HomeScreen({ navigation }) 
@@ -46,6 +37,77 @@ function HomeScreen({ navigation })
  
       <StatusBar style="auto" />
       <View style={styless.inputView}>
+      <TextInput
+          style={styless.TextInput}
+          placeholder="Email."
+          placeholderTextColor="#000000"
+          onChangeText={(email) => setEmail(email)}
+        />
+      </View>
+ 
+      <View style={styless.inputView}>
+      <TextInput
+          style={styless.TextInput}
+          placeholder="Password."
+          placeholderTextColor="#000000"
+          secureTextEntry={true}
+          onChangeText={(password) => setPassword(password)}
+        />
+      </View>
+ 
+      <TouchableOpacity>
+        <Text style={styless.forgot_button} onPress={() => navigation.navigate('forgotPassword')}>Forgot Password?</Text>
+        
+      </TouchableOpacity>
+ 
+      <TouchableOpacity style={styless.loginBtn}>
+        <Text style={styless.loginText} onPress={() => navigation.navigate('Details',{'email':email})}>LOGIN</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styless.loginBtn}>
+        <Text style={styless.loginText} onPress={() => navigation.navigate('Signup')}>SIGNUP</Text>
+        
+        
+      </TouchableOpacity>
+      
+         
+    </View>
+  );
+}
+
+
+ function ForgotPassword() {
+  return (
+    <View style={styless.container}>
+      <Text style={styless.SignupText} onPress={() => navigation.navigate('Signup')}>Enter Your E-mail.</Text>
+
+       <View style={styless.inputView}>
+        <TextInput
+          style={styless.TextInput}
+          placeholder="Email."
+          placeholderTextColor="#000000"
+          onChangeText={(email) => setEmail(email)}
+        />
+      </View>
+ 
+
+      <TouchableOpacity style={styless.loginBtn}>
+        <Text style={styless.loginText} onPress={() => navigation.navigate('Signup')}>Get Reset Link.</Text>
+        </TouchableOpacity>
+      </View>
+  );
+
+
+ }
+
+
+function Signup1() {
+
+  return (
+    <View style={styless.container}>
+      <Text style={styless.SignupText} onPress={() => navigation.navigate('Signup')}>Won't take more Than a min</Text>
+
+       <View style={styless.inputView}>
         <TextInput
           style={styless.TextInput}
           placeholder="Email."
@@ -63,26 +125,14 @@ function HomeScreen({ navigation })
           onChangeText={(password) => setPassword(password)}
         />
       </View>
- 
-      <TouchableOpacity>
-        <Text style={styless.forgot_button}>Forgot Password?</Text>
-        
-      </TouchableOpacity>
- 
-      <TouchableOpacity style={styless.loginBtn}>
-        <Text style={styless.loginText}>LOGIN</Text>
-      </TouchableOpacity>
 
       <TouchableOpacity style={styless.loginBtn}>
-        <Text style={styless.loginText} onPress={() => navigation.navigate('Details')}>SIGNUP</Text>
-        
-        
-      </TouchableOpacity>
-      
-         
-    </View>
+        <Text style={styless.loginText} onPress={() => navigation.navigate('Signup')}>Let Me In.</Text>
+        </TouchableOpacity>
+      </View>
   );
 }
+
 
 function FootBallPricing() {
   
@@ -140,11 +190,12 @@ function Leaderboard() {
 
   <ListItem bottomDivider>
               <Badge value="1st"/>
-              <ListItem.Content>
+              <ListItem.Content >
                 <ListItem.Title>IIT-BOMBAY 😻</ListItem.Title>
                 <ListItem.Subtitle><Text>Mumbai</Text></ListItem.Subtitle>
                 <ListItem.Subtitle><Text>4096 Pts</Text></ListItem.Subtitle>
               </ListItem.Content>
+             
   </ListItem>
 
   <ListItem bottomDivider>
@@ -166,38 +217,38 @@ function Leaderboard() {
   </ListItem>
 
   <ListItem bottomDivider>
-              <Badge value="1st" />
+              <Badge value="4th" />
               <ListItem.Content>
-                <ListItem.Title>IIT-BOMBAY 😻</ListItem.Title>
-                <ListItem.Subtitle><Text>Mumbai</Text></ListItem.Subtitle>
-                <ListItem.Subtitle><Text>4096 Pts</Text></ListItem.Subtitle>
+                <ListItem.Title>IIT-Guwahati 😻</ListItem.Title>
+                <ListItem.Subtitle><Text>Guwahati</Text></ListItem.Subtitle>
+                <ListItem.Subtitle><Text>2096 Pts</Text></ListItem.Subtitle>
               </ListItem.Content>
   </ListItem>
 
   <ListItem bottomDivider>
-              <Badge value="1st"/>
+              <Badge value="5th"/>
               <ListItem.Content>
-                <ListItem.Title>IIT-BOMBAY 😻</ListItem.Title>
-                <ListItem.Subtitle><Text>Mumbai</Text></ListItem.Subtitle>
-                <ListItem.Subtitle><Text>4096 Pts</Text></ListItem.Subtitle>
+                <ListItem.Title>IIT-Roorkee 😻</ListItem.Title>
+                <ListItem.Subtitle><Text>Roorkee</Text></ListItem.Subtitle>
+                <ListItem.Subtitle><Text>1086 Pts</Text></ListItem.Subtitle>
               </ListItem.Content>
   </ListItem>
 
   <ListItem bottomDivider>
-              <Badge value="1st"  size={20} />
+              <Badge value="6th"  size={20} />
               <ListItem.Content>
-                <ListItem.Title>IIT-BOMBAY 😻</ListItem.Title>
-                <ListItem.Subtitle><Text>Mumbai</Text></ListItem.Subtitle>
-                <ListItem.Subtitle><Text>4096 Pts</Text></ListItem.Subtitle>
+                <ListItem.Title>IIT-Kharagpur 😻</ListItem.Title>
+                <ListItem.Subtitle><Text>Kharagpur</Text></ListItem.Subtitle>
+                <ListItem.Subtitle><Text>960 Pts</Text></ListItem.Subtitle>
               </ListItem.Content>
   </ListItem>
 
   <ListItem bottomDivider>
-              <Badge value="1st" />
+              <Badge value="7th" />
               <ListItem.Content>
-                <ListItem.Title>IIT-BOMBAY 😻</ListItem.Title>
-                <ListItem.Subtitle><Text>Mumbai</Text></ListItem.Subtitle>
-                <ListItem.Subtitle><Text>4096 Pts</Text></ListItem.Subtitle>
+                <ListItem.Title>IISC 😻</ListItem.Title>
+                <ListItem.Subtitle><Text>Bangalore</Text></ListItem.Subtitle>
+                <ListItem.Subtitle><Text>657 Pts</Text></ListItem.Subtitle>
               </ListItem.Content>
   </ListItem>
 
@@ -207,7 +258,7 @@ function Leaderboard() {
 
 
 
-class support extends Component {
+class Support extends Component {
   render() {
     return (
       <WebView
@@ -220,10 +271,28 @@ class support extends Component {
 
 
 
-function DetailsScreen({ navigation }) {
-  
-  return (
-        
+
+
+
+
+function DetailsScreen({route,navigation }) {
+  const { email } = route.params;
+  console.log(email)
+  const [isLoading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+  console.log(data);
+
+  useEffect(() => {
+    fetch(url.concat(email))
+      .then((response) => response.json())
+      .then((json) => setData(json))
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false));
+  }, []);
+
+   
+  if (data['status']==200){
+    return (
         <View style={styless.container1}>
         <View style={styless.container2}>
         
@@ -260,13 +329,6 @@ function DetailsScreen({ navigation }) {
      const myIcon = <Icon onPress={() => navigation.navigate('Support')} name="phone" size={45} color="#34aeeb" />;
      </Text>
     </View>
-        
-      
-  
-
-    
-
-   
 
       <ScrollView style={styless.scrollView}>
 
@@ -525,7 +587,17 @@ function DetailsScreen({ navigation }) {
         </View>
         </View>
   );
+  
+  }
+   
+ 
 }
+
+ 
+
+
+
+
 
 const Stack = createNativeStackNavigator();
 
@@ -535,10 +607,12 @@ function App() {
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Details" component={DetailsScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="Signup" component={Signup1} options={{ headerShown: false }}/>
         <Stack.Screen name="Football" component={FootBallPricing} />
-        <Stack.Screen name="Support" component={support} />
+        <Stack.Screen name="Support" component={Support} />
         <Stack.Screen name="Transactions" component={Transactions} />
         <Stack.Screen name="LeaderBoard" component={Leaderboard} />
+        <Stack.Screen name="forgotPassword" component={ForgotPassword} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -631,7 +705,7 @@ const styless = StyleSheet.create({
     width: "70%",
     height: 45,
     marginBottom: 20,
- 
+    fontWeight: "bold",
     alignItems: "center",
   },
  
@@ -640,12 +714,14 @@ const styless = StyleSheet.create({
     flex: 1,
     padding: 10,
     marginLeft: 0,
+    fontWeight: "bold",
   },
  
   forgot_button: {
     height: 30,
     marginBottom: 30,
     color:"#ffffff",
+    fontWeight: "bold",
   },
  
   loginBtn: {
@@ -656,28 +732,22 @@ const styless = StyleSheet.create({
     justifyContent: "center",
     marginTop: 20,
     backgroundColor: "#ffffff",
+    fontWeight: "bold",
   },
+  
+  loginText: {
+    fontWeight: "bold",
+    color:"#000000",
+  },
+
+  SignupText: {
+    fontWeight: "bold",
+    color:"#ffffff",
+    marginBottom : 30,
+    fontSize : 20,
+  },
+
+
 });
 
 
-const styles1 = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  fonts: {
-    marginBottom: 8,
-  },
-  user: {
-    flexDirection: 'row',
-    marginBottom: 6,
-  },
-  image: {
-    width: 30,
-    height: 30,
-    marginRight: 10,
-  },
-  name: {
-    fontSize: 16,
-    marginTop: 5,
-  },
-  });
