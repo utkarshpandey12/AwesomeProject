@@ -21,6 +21,8 @@ import { WebView } from 'react-native-webview'
 let url = 'https://83y17x4f22.execute-api.ap-south-1.amazonaws.com/prod/users?function=get-user&user-email=';
  
 let signup_url = 'https://83y17x4f22.execute-api.ap-south-1.amazonaws.com/prod/users?function=post-user';
+
+let forgot_pass = "https://83y17x4f22.execute-api.ap-south-1.amazonaws.com/prod/users?function=reset-password&phone="
 var responsed = {};
 
 
@@ -76,29 +78,75 @@ function HomeScreen({ navigation })
 }
 
 
- function ForgotPassword() {
+ function ForgotPassword({ navigation }) {
+  const [phone, setPhonenumber] = useState("");
   return (
     <View style={styless.container}>
-      <Text style={styless.SignupText} onPress={() => navigation.navigate('Signup')}>Enter Your E-mail.</Text>
-
+      <Text style={styless.SignupText}>Enter Your Phone to get reset link.</Text>
        <View style={styless.inputView}>
         <TextInput
           style={styless.TextInput}
-          placeholder="Email."
+          placeholder="Enter Phonenumber."
           placeholderTextColor="#000000"
-          onChangeText={(email) => setEmail(email)}
+          textContentType='telephoneNumber' 
+          dataDetectorTypes='phoneNumber' 
+          keyboardType='phone-pad'
+          onChangeText={(phone) => setPhonenumber(phone)}
         />
       </View>
  
 
       <TouchableOpacity style={styless.loginBtn}>
-        <Text style={styless.loginText} onPress={() => navigation.navigate('Signup')}>Get Reset Link.</Text>
+        <Text style={styless.loginText} onPress={() => navigation.navigate('SendForgetLink',{'phone':phone})}>Get Reset Link.</Text>
         </TouchableOpacity>
       </View>
   );
-
+  
 
  }
+
+
+
+
+function SendForgetLink({route,navigation}){
+  const {phone} = route.params;
+  console.log(phone)
+  const [isLoading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+  console.log(data);
+
+  useEffect(() => {
+    fetch(forgot_pass.concat(phone))
+      .then((response) => response.json())
+      .then((json) => setData(json))
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false));
+  }, []);
+
+   
+  if (data['status']==200){
+    Alert.alert(
+      "Successfull",
+      "Reset Link Sent via SMS",
+      [
+       
+        { text: "OK", onPress: () => navigation.navigate('Home') },
+      ]
+    );
+  }
+  else{
+    Alert.alert(
+      "Something Went Wrong",
+      "Please Check the entered number and try again",
+      [
+       
+        { text: "Try Again", onPress: () => navigation.navigate('forgotPassword') },
+      ]
+    );
+  }
+
+}
+
 
 
 function Signup1({navigation}) {
@@ -719,6 +767,7 @@ function App() {
         <Stack.Screen name="LeaderBoard" component={Leaderboard} />
         <Stack.Screen name="forgotPassword" component={ForgotPassword} options={{ headerShown: false }}/>
         <Stack.Screen name="signupjump" component={Signupresult} options={{ headerShown: false }}/>
+        <Stack.Screen name="SendForgetLink" component={SendForgetLink} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
