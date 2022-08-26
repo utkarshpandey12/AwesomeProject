@@ -19,8 +19,8 @@ import { WebView } from 'react-native-webview'
 
 
 let url = 'https://83y17x4f22.execute-api.ap-south-1.amazonaws.com/prod/users?function=get-user&user-email=';
-
-
+ 
+let signup_url = 'https://83y17x4f22.execute-api.ap-south-1.amazonaws.com/prod/users?function=post-user';
 var responsed = {};
 
 
@@ -29,7 +29,7 @@ function HomeScreen({ navigation })
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const onPress = () => Alert.alert('Simple Button pressed');
+  //const onPress = () => Alert.alert('Simple Button pressed');
 
   return (
     <View style={styless.container}>
@@ -61,7 +61,7 @@ function HomeScreen({ navigation })
       </TouchableOpacity>
  
       <TouchableOpacity style={styless.loginBtn}>
-        <Text style={styless.loginText} onPress={() => navigation.navigate('Details',{'email':email})}>LOGIN</Text>
+        <Text style={styless.loginText} onPress={() => navigation.navigate('Details',{'email':email,'password':password})}>LOGIN</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styless.loginBtn}>
@@ -101,18 +101,23 @@ function HomeScreen({ navigation })
  }
 
 
-function Signup1() {
-
+function Signup1({navigation}) {
+  const [email1, setEmail1] = useState("");
+  const [password1, setPassword1] = useState("");
+  const [college1, setCollege1] = useState("");
+  const [year1, setYear1] = useState("");
+  const [phone1, setPhone1] = useState("");
+  const [branch1, setBranch1] = useState("");
   return (
     <View style={styless.container}>
-      <Text style={styless.SignupText} onPress={() => navigation.navigate('Signup')}>Won't take more Than a min</Text>
+      <Text style={styless.SignupText}>Won't take more Than a min</Text>
 
        <View style={styless.inputView}>
         <TextInput
           style={styless.TextInput}
           placeholder="Email."
           placeholderTextColor="#000000"
-          onChangeText={(email) => setEmail(email)}
+          onChangeText={(email1) => setEmail1(email1)}
         />
       </View>
  
@@ -122,12 +127,50 @@ function Signup1() {
           placeholder="Password."
           placeholderTextColor="#000000"
           secureTextEntry={true}
-          onChangeText={(password) => setPassword(password)}
+          onChangeText={(password1) => setPassword1(password1)}
         />
       </View>
 
+      <View style={styless.inputView}>
+        <TextInput
+          style={styless.TextInput}
+          placeholder="College Name"
+          placeholderTextColor="#000000"
+          onChangeText={(college1) => setCollege1(college1)}
+        />
+      </View>
+
+      <View style={styless.inputView}>
+        <TextInput
+          style={styless.TextInput}
+          placeholder="Year"
+          placeholderTextColor="#000000"
+          onChangeText={(year1) => setYear1(year1)}
+        />
+      </View>
+
+      <View style={styless.inputView}>
+        <TextInput
+          style={styless.TextInput}
+          placeholder="Phone No."
+          placeholderTextColor="#000000"
+          onChangeText={(phone1) => setPhone1(phone1)}
+        />
+      </View>
+
+      <View style={styless.inputView}>
+        <TextInput
+          style={styless.TextInput}
+          placeholder="Branch"
+          placeholderTextColor="#000000"
+          onChangeText={(branch1) => setBranch1(branch1)}
+        />
+      </View>
+
+      
+
       <TouchableOpacity style={styless.loginBtn}>
-        <Text style={styless.loginText} onPress={() => navigation.navigate('Signup')}>Let Me In.</Text>
+        <Text style={styless.loginText} onPress={() => navigation.navigate('signupjump',{'email':email1,'password':password1,'college':college1,'year':year1,'phone':phone1,'branch':branch1})}>Let Me In.</Text>
         </TouchableOpacity>
       </View>
   );
@@ -270,20 +313,72 @@ class Support extends Component {
 }
 
 
+function Signupresult({route,navigation }){
+  const { email , password , college , year,phone,branch} = route.params;
+  console.log(email,password , college , year,phone,branch)
 
-
-
-
-
-function DetailsScreen({route,navigation }) {
-  const { email } = route.params;
-  console.log(email)
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   console.log(data);
 
   useEffect(() => {
-    fetch(url.concat(email))
+    fetch(signup_url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email:email,
+        password:password,
+        college:college,
+        year:year,
+        phone:phone,
+        branch:branch
+      })
+    })
+      .then((response) => response.json())
+      .then((json) => setData(json))
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false));
+  }, []);
+
+   
+  if (data['status']==200){
+    Alert.alert(
+      "Successfull Registration",
+      "You can now login to enjoy.....",
+      [
+       
+        { text: "OK", onPress: () => navigation.navigate('Home') },
+      ]
+    );
+}
+
+else if (data['status']!=400) {
+  Alert.alert(
+    "Oops Something Went wrong",
+    "Please make sure to fill all details",
+    [
+     
+      { text: "OK", onPress: () => navigation.navigate('Signup') },
+    ]
+  );
+}
+}
+
+
+
+
+function DetailsScreen({route,navigation }) {
+  const { email , password } = route.params;
+  console.log(email,password)
+  const [isLoading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+  console.log(data);
+
+  useEffect(() => {
+    fetch(url.concat(email,'&password=',password))
       .then((response) => response.json())
       .then((json) => setData(json))
       .catch((error) => console.error(error))
@@ -589,6 +684,16 @@ function DetailsScreen({route,navigation }) {
   );
   
   }
+  else if (data['status']==404) {
+    Alert.alert(
+      "Invalid Details",
+      "Please check your credentials or signup if you are a new user",
+      [
+       
+        { text: "OK", onPress: () => navigation.navigate('Home') },
+      ]
+    );
+  }
    
  
 }
@@ -613,6 +718,7 @@ function App() {
         <Stack.Screen name="Transactions" component={Transactions} />
         <Stack.Screen name="LeaderBoard" component={Leaderboard} />
         <Stack.Screen name="forgotPassword" component={ForgotPassword} options={{ headerShown: false }}/>
+        <Stack.Screen name="signupjump" component={Signupresult} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
