@@ -15,7 +15,7 @@ import {useState,styles} from "react";
 import { PricingCard, lightColors ,ButtonGroup,Card, Avatar,ListItem,Badge} from '@rneui/themed';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { WebView } from 'react-native-webview'
-
+import {BleManager} from 'react-native-ble-plx'
 
 
 let url = 'https://83y17x4f22.execute-api.ap-south-1.amazonaws.com/prod/users?function=get-user&user-email=';
@@ -24,6 +24,8 @@ let signup_url = 'https://83y17x4f22.execute-api.ap-south-1.amazonaws.com/prod/u
 
 let forgot_pass = "https://83y17x4f22.execute-api.ap-south-1.amazonaws.com/prod/users?function=reset-password&phone="
 var responsed = {};
+
+const _BleManager = new BleManager();
 
 
 function HomeScreen({ navigation }) 
@@ -239,7 +241,7 @@ function Signup1({navigation}) {
 }
 
 
-function FootBallPricing() {
+function FootBallPricing({navigation}) {
   
   return (
     <View>
@@ -249,6 +251,7 @@ function FootBallPricing() {
         price="Rs-5/hr"
         info={['1 Football', 'Air Support', 'Damage/Lost charges applicable']}
         button={{ title: ' PAY NOW', icon: 'flight-takeoff' }}
+        onButtonPress= {() => navigation.navigate('Scanfordevices')}
       />
       </View>
   );
@@ -287,6 +290,35 @@ function Transactions() {
   );
 }
 
+
+
+function Scanfordevices(){
+  
+  const _BleManager = new BleManager();
+
+  _BleManager.startDeviceScan(null, null, (error, device) => {
+    if (error) {
+        // Handle error (scanning will be stopped automatically)
+        return
+    }
+    console.log(device.name)
+    // Check if it is a device you are looking for based on advertisement data
+    // or other criteria.
+    if (device.name === 'TI BLE Sensor Tag' || 
+        device.name === 'SensorTag') {
+        
+        // Stop scanning as it's not necessary if you are scanning for one device.
+        this.manager.stopDeviceScan();
+
+        // Proceed with connection.
+    }
+});
+  return (
+    <Text style={{
+      color: "black"
+  }}>hello from bluetooth page</Text>
+  );
+}
 
 function Leaderboard() {
   
@@ -476,13 +508,19 @@ function DetailsScreen({route,navigation }) {
     </View>
 
         <View style={styless.rowContainer3}>
-        <Text style={styless.text1}>
+        <Text style={{
+                    color: "black"
+                }}>
         const myIcon = <Icon onPress={() => navigation.navigate('Transactions')}   name="database" size={45} color="#34aeeb" />;
     </Text>
-     <Text style={styless.text1}>
+     <Text  style={{
+                    color: "black"
+                }}>
      const myIcon = <Icon onPress={() => navigation.navigate('LeaderBoard')}    name="trophy" size={45} color="#34aeeb" />;
      </Text>
-     <Text style={styless.text1}>
+     <Text  style={{
+                    color: "black"
+                }}>
      const myIcon = <Icon onPress={() => navigation.navigate('Support')} name="phone" size={45} color="#34aeeb" />;
      </Text>
     </View>
@@ -782,6 +820,7 @@ function App() {
         <Stack.Screen name="forgotPassword" component={ForgotPassword} options={{ headerShown: false }}/>
         <Stack.Screen name="signupjump" component={Signupresult} options={{ headerShown: false }}/>
         <Stack.Screen name="SendForgetLink" component={SendForgetLink} options={{ headerShown: false }}/>
+        <Stack.Screen name="Scanfordevices" component={Scanfordevices} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -833,10 +872,6 @@ const styless = StyleSheet.create({
     marginLeft:10,
     marginBottom:8,
 
-  },
-  
-  text1:{
-    color:"#000000",
   },
 
   container1: {
@@ -918,6 +953,30 @@ const styless = StyleSheet.create({
     color:"#ffffff",
     marginBottom : 30,
     fontSize : 20,
+  },
+
+  mainContainer: {
+    flex: 1,
+    padding: 10,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+  },
+
+  circleView: {
+    width: 250,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    height: 250,
+    borderRadius: 150,
+    borderWidth: 1,
+  },
+
+  boldTextStyle: {
+    fontSize: 20,
+    color: '#000',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 
 
