@@ -1,7 +1,7 @@
 import React, { Component, useEffect } from 'react'
 import { Button, View, Text,ScrollView,SafeAreaView,Alert } from 'react-native';
 import { StatusBar } from "expo-status-bar";
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer , useIsFocused} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import {
@@ -28,10 +28,18 @@ var responsed = {};
 
 function HomeScreen({ navigation }) 
 {
-
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   //const onPress = () => Alert.alert('Simple Button pressed');
+  
+  const isFocused = useIsFocused();
+  console.log(isFocused);
+  if (isFocused==true){
+
+
+  
+
 
   return (
     <View style={styless.container}>
@@ -54,6 +62,7 @@ function HomeScreen({ navigation })
           placeholderTextColor="#000000"
           secureTextEntry={true}
           onChangeText={(password) => setPassword(password)}
+
         />
       </View>
  
@@ -75,6 +84,11 @@ function HomeScreen({ navigation })
          
     </View>
   );
+  }
+  else if (isFocused==false){
+    return <Text>hello</Text>
+  }
+
 }
 
 
@@ -134,7 +148,7 @@ function SendForgetLink({route,navigation}){
       ]
     );
   }
-  else{
+  else if (data['status']==400){
     Alert.alert(
       "Something Went Wrong",
       "Please Check the entered number and try again",
@@ -353,7 +367,7 @@ class Support extends Component {
   render() {
     return (
       <WebView
-        source={{ uri: 'https://wa.me/919598829911?text=Hello%20Please%20Tell%20Us%20How%20Can%20We%20Help%20You%20Today.....' }}
+        source={{ uri: 'https://callify-test-transcriber.herokuapp.com/' }}
         style={{ marginTop: 20 }}
       />
     );
@@ -870,6 +884,7 @@ const styless = StyleSheet.create({
     padding: 10,
     marginLeft: 0,
     fontWeight: "bold",
+    color:'black'
   },
  
   forgot_button: {
