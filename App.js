@@ -367,7 +367,7 @@ class Support extends Component {
   render() {
     return (
       <WebView
-        source={{ uri: 'https://callify-test-transcriber.herokuapp.com/' }}
+        source={{ uri: 'https://wa.me/919598829911?text=Hello%20Please%20Tell%20Us%20How%20Can%20We%20Help%20You%20Today.....' }}
         style={{ marginTop: 20 }}
       />
     );
@@ -476,13 +476,13 @@ function DetailsScreen({route,navigation }) {
     </View>
 
         <View style={styless.rowContainer3}>
-        <Text>
+        <Text style={styless.text1}>
         const myIcon = <Icon onPress={() => navigation.navigate('Transactions')}   name="database" size={45} color="#34aeeb" />;
     </Text>
-     <Text>
+     <Text style={styless.text1}>
      const myIcon = <Icon onPress={() => navigation.navigate('LeaderBoard')}    name="trophy" size={45} color="#34aeeb" />;
      </Text>
-     <Text>
+     <Text style={styless.text1}>
      const myIcon = <Icon onPress={() => navigation.navigate('Support')} name="phone" size={45} color="#34aeeb" />;
      </Text>
     </View>
@@ -835,6 +835,9 @@ const styless = StyleSheet.create({
 
   },
   
+  text1:{
+    color:"#000000",
+  },
 
   container1: {
     flex: 1,
