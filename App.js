@@ -1,5 +1,5 @@
 import React, { Component, useEffect } from 'react'
-import { Button, View, Text,ScrollView,SafeAreaView,Alert } from 'react-native';
+import { Button, View, Text,ScrollView,SafeAreaView,Alert, Platform,PermissionsAndroid} from 'react-native';
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer , useIsFocused} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -16,6 +16,8 @@ import { PricingCard, lightColors ,ButtonGroup,Card, Avatar,ListItem,Badge} from
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { WebView } from 'react-native-webview'
 import {BleManager} from 'react-native-ble-plx'
+//import BleManager from '../BleManager';
+
 
 
 let url = 'https://83y17x4f22.execute-api.ap-south-1.amazonaws.com/prod/users?function=get-user&user-email=';
@@ -292,32 +294,64 @@ function Transactions() {
 
 
 
-function Scanfordevices(){
-  
-  const _BleManager = new BleManager();
+class Scanfordevices extends Component {
 
-  _BleManager.startDeviceScan(null, null, (error, device) => {
-    if (error) {
-        // Handle error (scanning will be stopped automatically)
-        return
-    }
-    console.log(device.name)
-    // Check if it is a device you are looking for based on advertisement data
-    // or other criteria.
-    if (device.name === 'TI BLE Sensor Tag' || 
-        device.name === 'SensorTag') {
-        
-        // Stop scanning as it's not necessary if you are scanning for one device.
-        this.manager.stopDeviceScan();
+  componentDidMount() {
+    
 
-        // Proceed with connection.
+
+    if (Platform.OS === 'android' && Platform.Version >= 23) {
+        PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION).then((result) => {
+            if (result) {
+              console.log("Permission is OK");
+            } else {
+              PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION).then((result) => {
+                if (result) {
+                  console.log("User accept");
+                } else {
+                  console.log("User refuse");
+                }
+              });
+            }
+      });
     }
-});
-  return (
-    <Text style={{
-      color: "black"
-  }}>hello from bluetooth page</Text>
+
+  }
+
+
+  constructor() {
+    super();
+    const manager = new BleManager();
+    console.log('manager', manager);
+    this.manager = manager;
+    console.log('manager.this', this.manager);
+    
+  }
+
+  scanAndConnect() {
+    //console.log("entrou", this.manager)
+    this.manager.startDeviceScan(null, null, (error, device) => {
+        if (error) {
+            // Handle error (scanning will be stopped automatically)
+            return
+        }
+
+        // Check if it is a device you are looking for based on advertisement data
+        // or other criteria.
+        console.log(device.name)
+    });
+}
+
+render() {
+  return(
+    <View>
+      <Button
+        title="APERTE"
+        onPress={() => this.scanAndConnect()}
+      />
+    </View>
   );
+}
 }
 
 function Leaderboard() {
@@ -449,7 +483,7 @@ function Signupresult({route,navigation }){
     );
 }
 
-else if (data['status']!=400) {
+else if (data['status']!=200) {
   Alert.alert(
     "Oops Something Went wrong",
     "Please make sure to fill all details",
@@ -972,13 +1006,7 @@ const styless = StyleSheet.create({
     borderWidth: 1,
   },
 
-  boldTextStyle: {
-    fontSize: 20,
-    color: '#000',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-
+ 
 
 });
 
