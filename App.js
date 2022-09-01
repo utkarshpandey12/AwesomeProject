@@ -335,10 +335,31 @@ class Scanfordevices extends Component {
             // Handle error (scanning will be stopped automatically)
             return
         }
+        if (device.name === 'HMSoft' || 
+            device.name === 'HMSoft') {
+            
+            // Stop scanning as it's not necessary if you are scanning for one device.
+            this.manager.stopDeviceScan();
+            // Proceed with connection.
+            
+            device.connect()
+            .then((device) => {
+             return device.discoverAllServicesAndCharacteristics()
+            }).then((device) => {
+       // Do work on device with services and characteristics
+             device.services().then(services => console.log(services))
+             //const services = device.services();
+             //console.log(services)
+            }).catch((error) => {
+        // Handle errors
+        console.log(error)
+            });
 
+            
+        }
         // Check if it is a device you are looking for based on advertisement data
         // or other criteria.
-        console.log(device.name)
+        //console.log(device.name)
     });
 }
 
