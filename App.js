@@ -14,8 +14,9 @@ import {
 import {useState,styles} from "react";
 import { PricingCard, lightColors ,ButtonGroup,Card, Avatar,ListItem,Badge} from '@rneui/themed';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { WebView } from 'react-native-webview'
-import {BleManager} from 'react-native-ble-plx'
+import { WebView } from 'react-native-webview';
+import {BleManager} from 'react-native-ble-plx';
+import {decode as atob, encode as btoa} from 'base-64';
 //import BleManager from '../BleManager';
 
 
@@ -344,12 +345,16 @@ class Scanfordevices extends Component {
             
             device.connect()
             .then((device) => {
+             //return device.writeCharacteristicWithoutResponseForService('0000ffe0-0000-1000-8000-00805f9b34fb', '0000ffe0-0000-1000-8000-00805f9b34fb', btoa('hello'))
              return device.discoverAllServicesAndCharacteristics()
             }).then((device) => {
        // Do work on device with services and characteristics
-             device.services().then(services => console.log(services))
-             //const services = device.services();
-             //console.log(services)
+       return device.writeCharacteristicWithoutResponseForService('0000ffe0-0000-1000-8000-00805f9b34fb', '0000ffe1-0000-1000-8000-00805f9b34fb', btoa('MESSAGE'))
+              //console.log(device)
+             //device.services().then(device => console.log(device))
+             //device.writeCharacteristicWithoutResponseForService('ffe0', 'ffe1', btoa('hello'))
+
+            //}).then(device => console.log(device))
             }).catch((error) => {
         // Handle errors
         console.log(error)
