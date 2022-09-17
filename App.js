@@ -385,16 +385,39 @@ class Scanfordevices extends Component {
 render() {
   return(
     <View>
-      <Button
-        title="APERTE"
-        onPress={() => this.scanAndConnect()}
-      />
+      
+          
       <TouchableOpacity
             onPress={() => this.stopConnection()} >
             <Text style={{
       color: "black"
   }}>Stop</Text>
         </TouchableOpacity>
+        <Image 
+        source={{uri: 'https://bestanimations.com/media/sports/492376808ping-pong-paddle-gif.gif'}}  
+        style={{width: 350, height:300,marginLeft:5,marginTop:100 }} 
+        />
+
+<TouchableOpacity onPress={() => this.scanAndConnect()}
+                style ={{
+                    height: 40,
+                    width:160,
+                    borderRadius:40,
+                    backgroundColor : "#2196F3",
+                    marginLeft :50,
+                    marginRight:50,
+                    marginTop :20
+                }}>
+                  <Text style={{
+      color: "white",
+      marginLeft:45,
+      height:40,
+      width:100,
+      fontSize:25,
+      fontWeight: "bold",
+      
+  }}>Unlock</Text>
+          </TouchableOpacity> 
     </View>
   );
 }
@@ -1022,6 +1045,8 @@ const styless = StyleSheet.create({
     backgroundColor: "#ffffff",
     fontWeight: "bold",
   },
+
+  
   
   loginText: {
     fontWeight: "bold",
