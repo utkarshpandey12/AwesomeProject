@@ -15,7 +15,7 @@ import {useState,styles} from "react";
 import { PricingCard, lightColors ,ButtonGroup,Card, Avatar,ListItem,Badge} from '@rneui/themed';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { WebView } from 'react-native-webview';
-import {BleManager} from 'react-native-ble-plx';
+import {BleManager, Characteristic} from 'react-native-ble-plx';
 import {decode as atob, encode as btoa} from 'base-64';
 //import BleManager from '../BleManager';
 
@@ -296,7 +296,8 @@ function Transactions() {
 
 
 class Scanfordevices extends Component {
-
+  
+  
   componentDidMount() {
     
 
@@ -326,19 +327,29 @@ class Scanfordevices extends Component {
     console.log('manager', manager);
     this.manager = manager;
     console.log('manager.this', this.manager);
+    this.device_id = {device_id : ''}
     
   }
+  
+  
+  stopConnection () {
+    this.manager.cancelDeviceConnection(this.device_id.device_id, (error, device) => {
+      console.log("hurray")
+    })
+  }
 
+  
   scanAndConnect() {
     //console.log("entrou", this.manager)
     this.manager.startDeviceScan(null, null, (error, device) => {
         if (error) {
             // Handle error (scanning will be stopped automatically)
-            return
+            console.log(error)
         }
         if (device.name === 'HMSoft' || 
             device.name === 'HMSoft') {
-            
+            this.device_id.device_id = device.id;
+            //console.log(this.device_id)
             // Stop scanning as it's not necessary if you are scanning for one device.
             this.manager.stopDeviceScan();
             // Proceed with connection.
@@ -349,8 +360,10 @@ class Scanfordevices extends Component {
              return device.discoverAllServicesAndCharacteristics()
             }).then((device) => {
        // Do work on device with services and characteristics
-       return device.writeCharacteristicWithoutResponseForService('0000ffe0-0000-1000-8000-00805f9b34fb', '0000ffe1-0000-1000-8000-00805f9b34fb', btoa('MESSAGE'))
-              //console.log(device)
+              device.writeCharacteristicWithoutResponseForService('0000ffe0-0000-1000-8000-00805f9b34fb', 
+             '0000ffe1-0000-1000-8000-00805f9b34fb', btoa('MESSAGE'))
+             
+             //console.log(device)
              //device.services().then(device => console.log(device))
              //device.writeCharacteristicWithoutResponseForService('ffe0', 'ffe1', btoa('hello'))
 
@@ -359,7 +372,8 @@ class Scanfordevices extends Component {
         // Handle errors
         console.log(error)
             });
-
+            //device.cancelConnection().then((conn) => {console.log(conn)})
+            
             
         }
         // Check if it is a device you are looking for based on advertisement data
@@ -375,6 +389,12 @@ render() {
         title="APERTE"
         onPress={() => this.scanAndConnect()}
       />
+      <TouchableOpacity
+            onPress={() => this.stopConnection()} >
+            <Text style={{
+      color: "black"
+  }}>Stop</Text>
+        </TouchableOpacity>
     </View>
   );
 }
